@@ -3,14 +3,14 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleURLTypes</key>
-    <array>
-        <dict>
-            <key>CFBundleURLSchemes</key>
-            <array>
-                <string>db-APP_KEY</string>
-            </array>
-        </dict>
-    </array>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>db-g7i6yjcw64au1j8</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>

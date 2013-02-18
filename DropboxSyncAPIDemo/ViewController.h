@@ -10,4 +10,6 @@
 
 @interface ViewController : UIViewController
 
+-(IBAction)linkAccountPressed:(id)sender;
+
 @end
