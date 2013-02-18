@@ -47,6 +47,7 @@
     self.folderContent = [[NSDictionary alloc] initWithDictionary:folderContentMutable];
 
 }
+
 #pragma mark - Actions
 
 -(IBAction)linkAccountPressed:(id)sender {
