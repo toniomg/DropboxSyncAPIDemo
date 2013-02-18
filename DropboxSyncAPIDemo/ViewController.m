@@ -8,6 +8,8 @@
 
 #import "ViewController.h"
 
+#import <Dropbox/Dropbox.h>
+
 @interface ViewController ()
 
 @end
@@ -24,6 +26,12 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+#pragma mark Actions
+
+-(IBAction)linkAccountPressed:(id)sender {
+    [[DBAccountManager sharedManager] linkFromController:self];
 }
 
 @end
