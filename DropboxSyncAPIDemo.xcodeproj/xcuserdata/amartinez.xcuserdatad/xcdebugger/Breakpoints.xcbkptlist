@@ -2,22 +2,19 @@
 <Bucket
    type = "1"
    version = "1.0">
-<<<<<<< HEAD
-=======
    <FileBreakpoints>
       <FileBreakpoint
          shouldBeEnabled = "Yes"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
-         filePath = "DropboxSyncAPIDemo/AppDelegate.m"
-         timestampString = "382896407.971929"
+         filePath = "DropboxSyncAPIDemo/ViewController.m"
+         timestampString = "382985503.096338"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "34"
-         endingLineNumber = "34"
-         landmarkName = "-application:openURL:sourceApplication:annotation:"
+         startingLineNumber = "41"
+         endingLineNumber = "41"
+         landmarkName = "-listContent"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>
->>>>>>> eba93916adb4cc1b492f2910cdc611e455e6bf43
 </Bucket>

@@ -38,6 +38,8 @@
         NSLog(@"App linked successfully!");
         return YES;
     }
+    
+    return NO;
 }
 							
 
