@@ -17,7 +17,7 @@
 		5233602616D287CE00BB8E9E /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5233602516D287CE00BB8E9E /* Default@2x.png */; };
 		5233602816D287CE00BB8E9E /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5233602716D287CE00BB8E9E /* Default-568h@2x.png */; };
 		5233602B16D287CE00BB8E9E /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5233602916D287CE00BB8E9E /* MainStoryboard.storyboard */; };
-		5233602E16D287CE00BB8E9E /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5233602D16D287CE00BB8E9E /* ViewController.m */; };
+		5233602E16D287CE00BB8E9E /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5233602D16D287CE00BB8E9E /* MainViewController.m */; };
 		5233603516D2884E00BB8E9E /* Dropbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5233603416D2884E00BB8E9E /* Dropbox.framework */; };
 		5233603716D2889300BB8E9E /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5233603616D2889300BB8E9E /* CFNetwork.framework */; };
 		5233603916D2889A00BB8E9E /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5233603816D2889A00BB8E9E /* Security.framework */; };
@@ -40,8 +40,8 @@
 		5233602516D287CE00BB8E9E /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		5233602716D287CE00BB8E9E /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		5233602A16D287CE00BB8E9E /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
-		5233602C16D287CE00BB8E9E /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		5233602D16D287CE00BB8E9E /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		5233602C16D287CE00BB8E9E /* MainViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
+		5233602D16D287CE00BB8E9E /* MainViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
 		5233603416D2884E00BB8E9E /* Dropbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Dropbox.framework; sourceTree = "<group>"; };
 		5233603616D2889300BB8E9E /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		5233603816D2889A00BB8E9E /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
@@ -106,8 +106,8 @@
 				5233602016D287CE00BB8E9E /* AppDelegate.h */,
 				5233602116D287CE00BB8E9E /* AppDelegate.m */,
 				5233602916D287CE00BB8E9E /* MainStoryboard.storyboard */,
-				5233602C16D287CE00BB8E9E /* ViewController.h */,
-				5233602D16D287CE00BB8E9E /* ViewController.m */,
+				5233602C16D287CE00BB8E9E /* MainViewController.h */,
+				5233602D16D287CE00BB8E9E /* MainViewController.m */,
 				5233601816D287CE00BB8E9E /* Supporting Files */,
 			);
 			path = DropboxSyncAPIDemo;
@@ -195,7 +195,7 @@
 			files = (
 				5233601E16D287CE00BB8E9E /* main.m in Sources */,
 				5233602216D287CE00BB8E9E /* AppDelegate.m in Sources */,
-				5233602E16D287CE00BB8E9E /* ViewController.m in Sources */,
+				5233602E16D287CE00BB8E9E /* MainViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -287,6 +287,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "DropboxSyncAPIDemo/DropboxSyncAPIDemo-Prefix.pch";
 				INFOPLIST_FILE = "DropboxSyncAPIDemo/DropboxSyncAPIDemo-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -302,6 +303,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "DropboxSyncAPIDemo/DropboxSyncAPIDemo-Prefix.pch";
 				INFOPLIST_FILE = "DropboxSyncAPIDemo/DropboxSyncAPIDemo-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -326,6 +328,7 @@
 				5233603316D287CE00BB8E9E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
