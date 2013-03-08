@@ -11,12 +11,12 @@
 @interface MainViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIAlertViewDelegate>
 
 @property (nonatomic, retain) IBOutlet UITableView * dropboxContentTableView;
-@property (nonatomic, retain) IBOutlet UIBarButtonItem *linkAccountButton;
 
 -(IBAction)linkAccountPressed:(id)sender;
 -(IBAction)newImagePressed:(id)sender;
 -(IBAction)newNotePressed:(id)sender;
 
 -(void)accountIsConnected:(NSString *)accID;
+
 
 @end

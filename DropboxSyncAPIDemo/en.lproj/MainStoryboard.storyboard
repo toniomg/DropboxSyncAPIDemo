@@ -48,40 +48,27 @@
                                             <action selector="newNotePressed:" destination="4" id="Lgf-d9-3bW"/>
                                         </connections>
                                     </barButtonItem>
+                                    <barButtonItem width="80" style="plain" systemItem="fixedSpace" id="67Z-jY-7te"/>
+                                    <barButtonItem title="Link" id="x9G-Nx-Yik">
+                                        <connections>
+                                            <action selector="linkAccountPressed:" destination="4" id="EzU-RU-p1b"/>
+                                        </connections>
+                                    </barButtonItem>
                                 </items>
                             </toolbar>
                         </subviews>
                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" id="HAN-Nb-IJ6">
-                        <barButtonItem key="rightBarButtonItem" title="Link" id="x9G-Nx-Yik">
-                            <connections>
-                                <action selector="linkAccountPressed:" destination="4" id="EzU-RU-p1b"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" id="HAN-Nb-IJ6"/>
                     <connections>
                         <outlet property="dropboxContentTableView" destination="KYE-uV-y9a" id="7l1-NI-kX6"/>
-                        <outlet property="linkAccountButton" destination="x9G-Nx-Yik" id="uq6-zT-oQy"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-680" y="60"/>
+            <point key="canvasLocation" x="-636" y="60"/>
         </scene>
     </scenes>
-    <classes>
-        <class className="MainViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MainViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="linkAccountPressed:"/>
-                <relationship kind="action" name="newImagePressed:"/>
-                <relationship kind="action" name="newNotePressed:"/>
-                <relationship kind="outlet" name="dropboxContentTableView" candidateClass="UITableView"/>
-                <relationship kind="outlet" name="linkAccountButton" candidateClass="UIBarButtonItem"/>
-            </relationships>
-        </class>
-    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

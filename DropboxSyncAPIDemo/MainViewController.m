@@ -36,13 +36,6 @@ enum FileType{
 -(void)accountIsConnected:(NSString *)accID
 {
     self.title = accID;
-
-    self.linkAccountButton.enabled = NO;
-    
-    [[DBFilesystem sharedFilesystem] addObserver:self forPathAndChildren:[DBPath root] block:^{
-        [self listContent];
-    }];
-    
     [self performSelectorInBackground:@selector(listContent) withObject:nil];
 }
 
@@ -50,18 +43,26 @@ enum FileType{
  */
 -(void)listContent
 {
-    NSMutableArray *folderContentMutable = [[NSMutableArray alloc] init];
-   
     //Get the list of files in the folder
-    NSArray *contents = [[DBFilesystem sharedFilesystem] listFolder:[DBPath root] error:nil];
-    for (DBFileInfo *info in contents) {
-        NSLog(@"File found: %@",info.path);
-        [folderContentMutable addObject:info.path];
-    }
-
-    self.folderContent = [[NSArray alloc] initWithArray:folderContentMutable];
+    DBError *error;
+    NSArray *contents = [[DBFilesystem sharedFilesystem] listFolder:[DBPath root] error:&error];
     
-    [self performSelectorOnMainThread:@selector(reloadTableData) withObject:nil waitUntilDone:YES];
+    if (!error)
+    {
+        NSMutableArray *folderContentMutable = [[NSMutableArray alloc] init];
+        
+        for (DBFileInfo *info in contents) {
+            NSLog(@"File found: %@",info.path);
+            [folderContentMutable addObject:info.path];
+        }
+
+        self.folderContent = [[NSArray alloc] initWithArray:folderContentMutable];
+        [self performSelectorOnMainThread:@selector(reloadTableData) withObject:nil waitUntilDone:YES];
+    }
+    else
+    {
+        NSLog(@"Error: %d", error.code);
+    }
 }
 
 -(void)reloadTableData
@@ -75,31 +76,51 @@ enum FileType{
 -(void)addImage:(NSData *)imageData toFile:(NSString *)fileName
 {
     DBFile *newImage = [self createNewFile:[NSString stringWithFormat:@"%@.jpg", fileName]];
+    DBError *error;
     [newImage writeData:imageData error:nil];
     
-    [self performSelectorInBackground:@selector(listContent) withObject:nil];
+    if (error)
+        NSLog(@"Error: %d", error.code);
+    else
+        [self performSelectorInBackground:@selector(listContent) withObject:nil];
 }
 
 
 -(void)addNote:(NSString *)text toFile:(NSString *)fileName
 {
     DBFile *newNote = [self createNewFile:[NSString stringWithFormat:@"%@.txt", fileName]];
-    [newNote writeString:text error:nil];
+    DBError *error;
+    [newNote writeString:text error:&error];
     
-    [self performSelectorInBackground:@selector(listContent) withObject:nil];
+    if (error)
+        NSLog(@"Error: %d", error.code);
+    else
+        [self performSelectorInBackground:@selector(listContent) withObject:nil];
 }
 
 -(DBFile *)createNewFile:(NSString *)name
 {
     DBPath *filePath = [[DBPath root] childPath:name];
-    DBFile *newFile = [[DBFilesystem sharedFilesystem] createFile:filePath error:nil];
     
-    return newFile;
+    DBError *error;
+    DBFile *newFile = [[DBFilesystem sharedFilesystem] createFile:filePath error:&error];
+    
+    if (!error)
+    {
+        return newFile;
+    }
+    else
+    {
+        NSLog(@"Error: %d", error.code);
+        return nil;
+    }
 }
 
 -(void)removeFileFromPath:(DBPath *)path
 {
-    [[DBFilesystem sharedFilesystem] deletePath:path error:nil];
+    DBError *error;
+    [[DBFilesystem sharedFilesystem] deletePath:path error:&error];
+    if (error) NSLog(@"Error: %d", error.code);
 }
 
 #pragma mark - Button Actions
@@ -151,7 +172,7 @@ enum FileType{
 }
 
 
-#pragma mark - UITableView Methods
+#pragma mark - UITableView
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return [self.folderContent count];
@@ -177,28 +198,37 @@ enum FileType{
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    //Look for the file
-     DBPath *filePath = [self.folderContent objectAtIndex:indexPath.row];
-     DBFile *file = [[DBFilesystem sharedFilesystem] openFile:filePath error:nil];
-
-    if ([[filePath.stringValue pathExtension] isEqualToString:@"jpg"])
+    //Look for the selected path
+    DBPath *filePath = [self.folderContent objectAtIndex:indexPath.row];
+    DBError *error;
+    DBFile *file = [[DBFilesystem sharedFilesystem] openFile:filePath error:&error];
+    
+    if (!error)
     {
-        UIViewController *simpleImage = [[UIViewController alloc] init];
-        UIImageView *imageView = [[UIImageView alloc] initWithFrame:self.view.frame];
-        imageView.image = [UIImage imageWithData:[file readData:nil]];
-        simpleImage.view = imageView;
-        
-        [self.navigationController pushViewController:simpleImage animated:YES];
+        //Get the file type
+        if ([[filePath.stringValue pathExtension] isEqualToString:@"jpg"])
+        {
+            UIViewController *simpleImage = [[UIViewController alloc] init];
+            UIImageView *imageView = [[UIImageView alloc] initWithFrame:self.view.frame];
+            imageView.image = [UIImage imageWithData:[file readData:nil]];
+            simpleImage.view = imageView;
+            
+            [self.navigationController pushViewController:simpleImage animated:YES];
+        }
+        else if ([[filePath.stringValue pathExtension] isEqualToString:@"txt"])
+        {
+            UIViewController *simpleText = [[UIViewController alloc] init];
+            UITextField *noteText = [[UITextField alloc] initWithFrame:self.view.frame];
+            noteText.backgroundColor = [UIColor whiteColor];
+            noteText.text = [file readString:nil];
+            simpleText.view = noteText;
+            
+            [self.navigationController pushViewController:simpleText animated:YES];
+        }
     }
-    else if ([[filePath.stringValue pathExtension] isEqualToString:@"txt"])
+    else
     {
-        UIViewController *simpleText = [[UIViewController alloc] init];
-        UITextField *noteText = [[UITextField alloc] initWithFrame:self.view.frame];
-        noteText.backgroundColor = [UIColor whiteColor];
-        noteText.text = [file readString:nil];
-        simpleText.view = noteText;
-        
-        [self.navigationController pushViewController:simpleText animated:YES];
+        NSLog(@"Error: %d", error.code);
     }
     
 }
