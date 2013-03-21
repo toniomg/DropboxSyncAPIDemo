@@ -20,12 +20,14 @@ static NSString *APP_SECRET  = @"6klwyiwc5ew1nug";
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     UINavigationController *navController = (UINavigationController *)self.window.rootViewController;
+    navController.toolbarHidden = NO;
     self.mainViewController = (MainViewController *)[navController.viewControllers objectAtIndex:0];
+
     
     //Init the account manager
     DBAccountManager* accountMgr = [[DBAccountManager alloc] initWithAppKey:APP_KEY secret:APP_SECRET];
     [DBAccountManager setSharedManager:accountMgr];
-    
+     
     //check if the account is already conected
     DBAccount *account = accountMgr.linkedAccount;
     [self checkAccountConnected:account];

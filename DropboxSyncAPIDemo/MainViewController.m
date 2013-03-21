@@ -24,10 +24,46 @@ enum FileType{
 @property (strong, nonatomic) NSString *fileName;
 @property (strong, nonatomic) UIAlertView *nameAlertView;
 @property (strong, nonatomic) UIAlertView *textAlertView;
+@property (strong, nonatomic) UIBarButtonItem *buttonAddPicture;
+@property (strong, nonatomic) UIBarButtonItem *buttonAddNote;
 
 @end
 
 @implementation MainViewController
+
+-(id)initWithCoder:(NSCoder *)aDecoder
+{
+    self = [super initWithCoder:aDecoder];
+    if (self) {
+        
+        UIBarButtonItem *buttonLink = [[UIBarButtonItem alloc]  initWithTitle:@"Link" style:UIBarButtonItemStyleBordered target:self action:@selector(linkAccountPressed:)];
+    
+         self.buttonAddPicture = [[UIBarButtonItem alloc]  initWithTitle:@"Add Picture" style:UIBarButtonItemStyleBordered target:self action:@selector(newImagePressed:)];
+        self.buttonAddPicture.enabled = NO;
+        
+         self.buttonAddNote = [[UIBarButtonItem alloc]  initWithTitle:@"Add Note" style:UIBarButtonItemStyleBordered target:self action:@selector(newNotePressed:)];
+        self.buttonAddNote.enabled = NO;
+        
+        NSArray* toolbarItems = [NSArray arrayWithObjects:buttonLink, self.buttonAddPicture, self.buttonAddNote, nil];
+        
+        self.toolbarItems = toolbarItems;
+        self.navigationController.toolbarHidden = NO;
+    }
+    
+    return self;
+    
+}
+
+-(void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    UIRefreshControl *refreshControl = [[UIRefreshControl alloc]
+                                        init];
+    refreshControl.tintColor = [UIColor grayColor];
+    [refreshControl addTarget:self action:@selector(refreshTable:) forControlEvents:UIControlEventValueChanged];
+    self.refreshControl = refreshControl;
+}
 
 
 /**
@@ -36,6 +72,14 @@ enum FileType{
 -(void)accountIsConnected:(NSString *)accID
 {
     self.title = accID;
+    self.buttonAddNote.enabled = YES;
+    self.buttonAddPicture.enabled = YES;
+    
+    [[DBFilesystem sharedFilesystem] addObserver:self forPathAndChildren:[DBPath root] block:^(){
+        [self performSelectorInBackground:@selector(listContent) withObject:nil];
+    }];
+    
+    
     [self performSelectorInBackground:@selector(listContent) withObject:nil];
 }
 
@@ -52,7 +96,6 @@ enum FileType{
         NSMutableArray *folderContentMutable = [[NSMutableArray alloc] init];
         
         for (DBFileInfo *info in contents) {
-            NSLog(@"File found: %@",info.path);
             [folderContentMutable addObject:info.path];
         }
 
@@ -67,7 +110,15 @@ enum FileType{
 
 -(void)reloadTableData
 {
-    [self.dropboxContentTableView reloadData];
+    if ([self.refreshControl isRefreshing])
+        [self.refreshControl endRefreshing];
+    
+    [self.tableView reloadData];
+}
+
+-(IBAction)refreshTable:(id)sender
+{
+    [self performSelectorInBackground:@selector(listContent) withObject:nil];
 }
 
 
@@ -81,8 +132,7 @@ enum FileType{
     
     if (error)
         NSLog(@"Error: %d", error.code);
-    else
-        [self performSelectorInBackground:@selector(listContent) withObject:nil];
+        
 }
 
 
@@ -94,8 +144,6 @@ enum FileType{
     
     if (error)
         NSLog(@"Error: %d", error.code);
-    else
-        [self performSelectorInBackground:@selector(listContent) withObject:nil];
 }
 
 -(DBFile *)createNewFile:(NSString *)name
@@ -171,6 +219,43 @@ enum FileType{
     [self.nameAlertView show];
 }
 
+-(void)showFileSelected:(DBPath *)filePath
+{
+    //Look for the selected path
+    //DBPath *filePath = [self.folderContent objectAtIndex:indexPath.row];
+    DBError *error;
+    DBFile *file = [[DBFilesystem sharedFilesystem] openFile:filePath error:&error];
+    
+    if (!error)
+    {
+        //Get the file type
+        if ([[filePath.stringValue pathExtension] isEqualToString:@"jpg"])
+        {
+            UIViewController *simpleImage = [[UIViewController alloc] init];
+            UIImageView *imageView = [[UIImageView alloc] initWithFrame:self.view.frame];
+            imageView.contentMode = UIViewContentModeScaleAspectFit;
+            imageView.image = [UIImage imageWithData:[file readData:nil]];
+            simpleImage.view = imageView;
+            
+            [self.navigationController pushViewController:simpleImage animated:YES];
+        }
+        else if ([[filePath.stringValue pathExtension] isEqualToString:@"txt"])
+        {
+            UIViewController *simpleText = [[UIViewController alloc] init];
+            UITextField *noteText = [[UITextField alloc] initWithFrame:self.view.frame];
+            noteText.backgroundColor = [UIColor whiteColor];
+            noteText.text = [file readString:nil];
+            simpleText.view = noteText;
+            
+            [self.navigationController pushViewController:simpleText animated:YES];
+        }
+    }
+    else
+    {
+        NSLog(@"Error: %d", error.code);
+    }
+
+}
 
 #pragma mark - UITableView
 
@@ -198,39 +283,8 @@ enum FileType{
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    //Look for the selected path
-    DBPath *filePath = [self.folderContent objectAtIndex:indexPath.row];
-    DBError *error;
-    DBFile *file = [[DBFilesystem sharedFilesystem] openFile:filePath error:&error];
-    
-    if (!error)
-    {
-        //Get the file type
-        if ([[filePath.stringValue pathExtension] isEqualToString:@"jpg"])
-        {
-            UIViewController *simpleImage = [[UIViewController alloc] init];
-            UIImageView *imageView = [[UIImageView alloc] initWithFrame:self.view.frame];
-            imageView.image = [UIImage imageWithData:[file readData:nil]];
-            simpleImage.view = imageView;
-            
-            [self.navigationController pushViewController:simpleImage animated:YES];
-        }
-        else if ([[filePath.stringValue pathExtension] isEqualToString:@"txt"])
-        {
-            UIViewController *simpleText = [[UIViewController alloc] init];
-            UITextField *noteText = [[UITextField alloc] initWithFrame:self.view.frame];
-            noteText.backgroundColor = [UIColor whiteColor];
-            noteText.text = [file readString:nil];
-            simpleText.view = noteText;
-            
-            [self.navigationController pushViewController:simpleText animated:YES];
-        }
-    }
-    else
-    {
-        NSLog(@"Error: %d", error.code);
-    }
-    
+    //Read the file in background
+    [self performSelectorInBackground:@selector(showFileSelected:) withObject:[self.folderContent objectAtIndex:indexPath.row]];
 }
 
 -(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -246,6 +300,7 @@ enum FileType{
         [self performSelectorInBackground:@selector(listContent) withObject:nil];
     }
 }
+
 
 #pragma mark - ImagePicker Delegate
 

@@ -8,9 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MainViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIAlertViewDelegate>
-
-@property (nonatomic, retain) IBOutlet UITableView * dropboxContentTableView;
+@interface MainViewController : UITableViewController <UITableViewDataSource, UITableViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIAlertViewDelegate>
 
 -(IBAction)linkAccountPressed:(id)sender;
 -(IBAction)newImagePressed:(id)sender;
