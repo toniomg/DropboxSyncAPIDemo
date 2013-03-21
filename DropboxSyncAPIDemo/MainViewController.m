@@ -96,15 +96,12 @@ enum FileType{
         NSMutableArray *folderContentMutable = [[NSMutableArray alloc] init];
         
         for (DBFileInfo *info in contents) {
-            [folderContentMutable addObject:info.path];
+            if (![info isFolder])
+                [folderContentMutable addObject:info.path];
         }
 
         self.folderContent = [[NSArray alloc] initWithArray:folderContentMutable];
         [self performSelectorOnMainThread:@selector(reloadTableData) withObject:nil waitUntilDone:YES];
-    }
-    else
-    {
-        NSLog(@"Error: %d", error.code);
     }
 }
 
@@ -127,11 +124,7 @@ enum FileType{
 -(void)addImage:(NSData *)imageData toFile:(NSString *)fileName
 {
     DBFile *newImage = [self createNewFile:[NSString stringWithFormat:@"%@.jpg", fileName]];
-    DBError *error;
     [newImage writeData:imageData error:nil];
-    
-    if (error)
-        NSLog(@"Error: %d", error.code);
         
 }
 
@@ -139,11 +132,7 @@ enum FileType{
 -(void)addNote:(NSString *)text toFile:(NSString *)fileName
 {
     DBFile *newNote = [self createNewFile:[NSString stringWithFormat:@"%@.txt", fileName]];
-    DBError *error;
-    [newNote writeString:text error:&error];
-    
-    if (error)
-        NSLog(@"Error: %d", error.code);
+    [newNote writeString:text error:nil];
 }
 
 -(DBFile *)createNewFile:(NSString *)name
@@ -154,21 +143,14 @@ enum FileType{
     DBFile *newFile = [[DBFilesystem sharedFilesystem] createFile:filePath error:&error];
     
     if (!error)
-    {
         return newFile;
-    }
     else
-    {
-        NSLog(@"Error: %d", error.code);
         return nil;
-    }
 }
 
 -(void)removeFileFromPath:(DBPath *)path
 {
-    DBError *error;
-    [[DBFilesystem sharedFilesystem] deletePath:path error:&error];
-    if (error) NSLog(@"Error: %d", error.code);
+    [[DBFilesystem sharedFilesystem] deletePath:path error:nil];
 }
 
 #pragma mark - Button Actions
@@ -250,11 +232,6 @@ enum FileType{
             [self.navigationController pushViewController:simpleText animated:YES];
         }
     }
-    else
-    {
-        NSLog(@"Error: %d", error.code);
-    }
-
 }
 
 #pragma mark - UITableView
@@ -344,7 +321,6 @@ enum FileType{
                 [self addNote:text toFile:self.fileName];
             }
         }
-
     }
 }
 
