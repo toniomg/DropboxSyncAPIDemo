@@ -96,12 +96,8 @@ enum FileType{
         NSMutableArray *folderContentMutable = [[NSMutableArray alloc] init];
         
         for (DBFileInfo *info in contents) {
-<<<<<<< HEAD
             if (![info isFolder])
                 [folderContentMutable addObject:info.path];
-=======
-            [folderContentMutable addObject:info.path];
->>>>>>> ace8684d2765343830df4f9aabe8cc5ca528c1c9
         }
 
         self.folderContent = [[NSArray alloc] initWithArray:folderContentMutable];
@@ -129,28 +125,13 @@ enum FileType{
 {
     DBFile *newImage = [self createNewFile:[NSString stringWithFormat:@"%@.jpg", fileName]];
     [newImage writeData:imageData error:nil];
-<<<<<<< HEAD
-=======
-    
-    if (error)
-        NSLog(@"Error: %d", error.code);
->>>>>>> ace8684d2765343830df4f9aabe8cc5ca528c1c9
-        
 }
 
 
 -(void)addNote:(NSString *)text toFile:(NSString *)fileName
 {
     DBFile *newNote = [self createNewFile:[NSString stringWithFormat:@"%@.txt", fileName]];
-<<<<<<< HEAD
     [newNote writeString:text error:nil];
-=======
-    DBError *error;
-    [newNote writeString:text error:&error];
-    
-    if (error)
-        NSLog(@"Error: %d", error.code);
->>>>>>> ace8684d2765343830df4f9aabe8cc5ca528c1c9
 }
 
 -(DBFile *)createNewFile:(NSString *)name
@@ -250,25 +231,6 @@ enum FileType{
             [self.navigationController pushViewController:simpleText animated:YES];
         }
     }
-}
-
-#pragma mark - UITableView
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return [self.folderContent count];
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    
-    NSString *cellIdentifier = @"DropboxListCellIdentifier";
-    
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    
-    if(cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
-                                      reuseIdentifier:cellIdentifier];
-    }
-
 }
 
 #pragma mark - UITableView

@@ -8,11 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MainViewController : UITableViewController <UITableViewDataSource, UITableViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIAlertViewDelegate>
-
--(IBAction)linkAccountPressed:(id)sender;
--(IBAction)newImagePressed:(id)sender;
--(IBAction)newNotePressed:(id)sender;
+@interface MainViewController : UITableViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIAlertViewDelegate>
 
 -(void)accountIsConnected:(NSString *)accID;
 
